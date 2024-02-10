@@ -52,14 +52,14 @@ const ADD = () => {
     if (!validateFormData()) return;
     
     if (selectedIndex === -1) {
-      setFileData([...fileData, [formData.name, formData.age, formData.email, formData.salary, formData.joinDate]]);
+      setFileData([...fileData, [formData.name, formData.email, formData.salary, formData.age, formData.joinDate]]);
     } else {
       const newData = [...fileData];
-      newData[selectedIndex] = [formData.name, formData.age, formData.email, formData.salary, formData.joinDate];
+      newData[selectedIndex] = [formData.name, formData.email, formData.salary, formData.age, formData.joinDate];
       setFileData(newData);
       setSelectedIndex(-1);
     }
-    setFormData({ name: '', age: '', email: '', salary: '', joinDate: '' });
+    setFormData({ name: '', salary: '', email: '', age: '', joinDate: '' });
   };
 
   const handleDeleteEntry = (index) => {
@@ -68,7 +68,7 @@ const ADD = () => {
     setFileData(newData);
     if (selectedIndex === index) {
       setSelectedIndex(-1);
-      setFormData({ name: '', age: '', email: '', salary: '', joinDate: '' });
+      setFormData({ name: '', salary: '', email: '', age: '', joinDate: '' });
     }
   };
 
@@ -93,23 +93,23 @@ const ADD = () => {
 
   useEffect(() => {
     const generateGraphData = () => {
-      const joinDates = fileData.map(entry => new Date(entry[4]));
-      const salaries = fileData.map(entry => parseInt(entry[3]));
+      const joinDates = fileData.map(entry => new Date(entry[4])).filter(date => date.getFullYear() >= 2001);
+      const salaries = fileData.filter(entry => new Date(entry[4]).getFullYear() >= 2001).map(entry => parseInt(entry[3]));
 
       const ctx = canvasRef.current.getContext('2d');
       if (chartRef.current) {
         chartRef.current.destroy();
       }
       chartRef.current = new Chart(ctx, {
-        type: 'line',
+        type: 'bar', // Changed to bar
         data: {
           labels: joinDates,
           datasets: [{
             label: 'Salary vs Join Date',
             data: salaries,
-            fill: false,
+            backgroundColor: 'rgb(75, 192, 192)', // Added backgroundColor property
             borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+            borderWidth: 1 // Added borderWidth property
           }]
         },
         options: {
@@ -117,8 +117,8 @@ const ADD = () => {
             x: {
               type: 'time',
               time: {
-                parser: 'YYYY-MM-DD',
-                tooltipFormat: 'll',
+                parser: 'yyyy-MM-dd',
+                tooltipFormat: 'MMM d, yyyy',
               },
               title: {
                 display: true,
@@ -129,15 +129,15 @@ const ADD = () => {
               title: {
                 display: true,
                 text: 'Salary'
-              }
-            }
-          }
+              }
+            }
+          }
         }
       });
     };
 
     generateGraphData();
-  }, [fileData]);
+  }, [fileData]);
 
   return (
     <div>
@@ -187,9 +187,9 @@ const ADD = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Age</th>
             <th>Email</th>
             <th>Salary</th>
+            <th>Age</th>
             <th>Join Date</th>
             <th>Action</th>
           </tr>
