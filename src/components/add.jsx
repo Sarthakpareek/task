@@ -53,12 +53,7 @@ const ADD = () => {
     
     if (selectedIndex === -1) {
       setFileData([...fileData, [formData.name, formData.email, formData.salary, formData.age, formData.joinDate]]);
-    } else {
-      const newData = [...fileData];
-      newData[selectedIndex] = [formData.name, formData.email, formData.salary, formData.age, formData.joinDate];
-      setFileData(newData);
-      setSelectedIndex(-1);
-    }
+    } 
     setFormData({ name: '', salary: '', email: '', age: '', joinDate: '' });
   };
 
