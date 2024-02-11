@@ -6,7 +6,7 @@ const ADD = () => {
   const [fileData, setFileData] = useState([]);
   const [formData, setFormData] = useState({ name: '', age: '', email: '', salary: '', joinDate: '' });
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [disableValidation, setDisableValidation] = useState(true); // Temporary state to disable validation
+  //const [disableValidation, setDisableValidation] = useState(true); // Temporary state to disable validation
 
   const chartRef = useRef(null);
   const canvasRef = useRef(null);
@@ -24,28 +24,29 @@ const ADD = () => {
   const isValidDate = (date) => {
     return !isNaN(Date.parse(date));
   };
-
   const validateFormData = () => {
-    if (disableValidation) { // Disable validation temporarily
-      return true;
-    }
+    // if (disableValidation) { // Disable validation temporarily
+    //   return true;
+    // }
     if (!formData.name.trim() || !formData.age.trim() || !formData.email.trim() || !formData.salary.trim() || !formData.joinDate.trim()) {
-      return false;
+      return false; // Check if any field is empty
     }
     if (isNaN(formData.age) || parseInt(formData.age) <= 0) {
-      return false;
+      return false; // Check if age is a positive number
     }
     if (!isValidEmail(formData.email)) {
-      return false;
+      return false; // Check if email is valid
     }
     if (isNaN(formData.salary) || parseFloat(formData.salary) <= 0) {
-      return false;
+      return false; // Check if salary is a positive number
     }
     if (!isValidDate(formData.joinDate)) {
-      return false;
+      return false; // Check if join date is a valid date
     }
     return true;
   };
+  
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
